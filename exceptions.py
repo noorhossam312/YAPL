@@ -1,0 +1,2 @@
+class InvalidExtensionError(Exception):
+    pass
