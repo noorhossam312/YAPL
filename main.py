@@ -4,12 +4,15 @@ from exceptions import *
 RED = "\033[31m"
 RESET = "\033[0m"
 
+
 def check(file_path):
     if not file_path.endswith(".ypl"):
-        raise InvalidExtensionError(f"{RED}Expected {os.path.basename(file_path).split(".")[0]}.ypl, got {os.path.basename(file_path)}{RESET}")
+        raise InvalidExtensionError(
+            f"{RED}Expected {os.path.basename(file_path).split(".")[0]}.ypl, got {os.path.basename(file_path)}{RESET}")
 
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"{RED}File does not exist{RESET}")
+
 
 file = input(r"""
  __      __   ______   _______   __
@@ -68,7 +71,7 @@ with open(file) as f:
             condition = condition[1:-1]
             operator = condition.split(" ")[1]
             var_a = env[condition.split(" ")[0]]
-            var_b = env[condition.split(" ")[2][1:]] # It just works, don't ask me how it works
+            var_b = env[condition.split(" ")[2][1:]]  # It just works, don't ask me how it works
             if operator == "is":
                 try:
                     var_a = float(var_a)
@@ -80,9 +83,61 @@ with open(file) as f:
                     pass
                 if var_a != var_b:
                     condition_tf = False
+            if operator == ">":
+                try:
+                    var_a = float(var_a)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_a} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                try:
+                    var_b = float(var_b)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_b} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                if not var_a > var_b:
+                    condition_tf = False
+            if operator == "<":
+                try:
+                    var_a = float(var_a)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_a} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                try:
+                    var_b = float(var_b)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_b} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                if not var_a < var_b:
+                    condition_tf = False
+            if operator == ">=":
+                try:
+                    var_a = float(var_a)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_a} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                try:
+                    var_b = float(var_b)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_b} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                if not var_a >= var_b:
+                    condition_tf = False
+            if operator == "<=":
+                try:
+                    var_a = float(var_a)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_a} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                try:
+                    var_b = float(var_b)
+                except ValueError:
+                    raise TypeError(
+                        f"{RED}Can't convert {var_b} into a float. Is the variable a string? line {RESET}{line_num + 1}\n{line}")
+                if not var_a <= var_b:
+                    condition_tf = False
             continue
             # print(f"{var_a} {type(var_a)} {var_b} {type(var_b)}")  # debug
             # print(operator)  # debug
 
         if not line.startswith(";"):
-            raise SyntaxError(f"{RED}Invalid syntax on line number {line_num+1}.\n{line}{RESET}")
+            raise SyntaxError(f"{RED}Invalid syntax on line number {line_num + 1}.\n{line}{RESET}")
