@@ -62,13 +62,13 @@ with open(file) as f:
             print(" ".join(text))
             continue
         if line.startswith("if"):
-            condition = line[2:-1]
+            condition = line[2:]
             if condition[0] == " ":
                 condition = condition[1:]
             condition = condition[1:-1]
             operator = condition.split(" ")[1]
-            var_a = env[condition.split(" ")[0][1:]]
-            var_b = env[condition.split(" ")[2][1:]]
+            var_a = env[condition.split(" ")[0]]
+            var_b = env[condition.split(" ")[2][1:]] # It just works, don't ask me how it works
             if operator == "is":
                 try:
                     var_a = float(var_a)
@@ -83,12 +83,6 @@ with open(file) as f:
             continue
             # print(f"{var_a} {type(var_a)} {var_b} {type(var_b)}")  # debug
             # print(operator)  # debug
+
         if not line.startswith(";"):
             raise SyntaxError(f"{RED}Invalid syntax on line number {line_num+1}.\n{line}{RESET}")
-
-
-
-"""ex:
-if($x):
-print 505
-;"""
